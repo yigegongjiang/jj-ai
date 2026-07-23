@@ -886,6 +886,132 @@ tbody tr.sel td {
   margin-top: 4px;
 }
 
+/* ============ modelfit extras ============ */
+.ram-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.ram-input {
+  width: 72px;
+  margin-bottom: 0;
+  font-family: var(--mono);
+  text-align: right;
+  -moz-appearance: textfield;
+}
+.ram-input::-webkit-outer-spin-button,
+.ram-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.ram-hint {
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.qz {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.qz-api {
+  color: var(--accent);
+}
+
+.utags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.utag {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.utag-more {
+  color: var(--faint);
+}
+
+.dep {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.badge-local {
+  color: var(--green);
+  background: rgba(74, 222, 128, 0.12);
+}
+.badge-cloud {
+  color: var(--accent-hover);
+  background: var(--accent-soft);
+}
+.badge-open {
+  color: var(--teal);
+  background: rgba(45, 212, 191, 0.12);
+}
+.badge-closed {
+  color: var(--faint);
+  background: var(--surface);
+  border-color: var(--border);
+}
+.badge-diy {
+  color: var(--amber);
+  background: rgba(251, 191, 36, 0.12);
+}
+
+.cmd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 11px 13px;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--fg);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.cmd:hover {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+}
+.cmd code {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 12px;
+  word-break: break-all;
+}
+.cmd svg {
+  flex: none;
+  color: var(--faint);
+}
+.cmd.copied {
+  border-color: var(--green);
+}
+.cmd.copied svg {
+  color: var(--green);
+}
+.tag-cat {
+  color: var(--accent-hover);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
 @media (max-width: 720px) {
   .rail {
     display: none;

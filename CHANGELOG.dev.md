@@ -7,6 +7,22 @@
 
 # Changelog (developer, follow [CHANGELOG.md](./CHANGELOG.md))
 
+## [0.3.0] - 2026-07-24
+
+### Added
+
+- 本地部署模型页 (`/modelfit`): RAM 反查 + 多维过滤 + 排序 + 详情抽屉 (可复制 Ollama 命令)
+  - `app/routes/modelfit.tsx`: loader 读 KV; action fetch `https://modelfit.io/api/dataset/` (返回 `{models, updated, counts}`, 与 OpenRouter 异构) → 仅在有效非空数组时覆盖快照; 复用 `MODELS_KV` 新键 `modelfit` (无需改 `wrangler.jsonc`)
+  - 稳定行 id `model+"|"+quantization` (feature.md 警示同模型多量化会重复, 现快照虽唯一仍前置防御); React key + 选中态均用之
+  - 云端行 `minRamGb/estimatedLoadGb=0`、`params=null` 一律渲染 `—`/`Cloud`/`API`, 排序时 0/null 恒排末尾 (不显示误导性 "0 GB")
+  - `bestFor` 42 原始标签 → 12 规范用途类目 (`CAT_MAP` 全映射, 含多类目/兜底, 无模型从 facet 丢失); 类目 facet 按固定顺序展示
+  - RAM 预算过滤 = `runsLocally && minRamGb<=budget` (云端无本地占用故排除); 参数档 null 不入档
+  - 客户端全量内存派生/过滤/排序; `useDeferredValue` 平滑; 107 行无需虚拟化
+- Sync 按钮: 一键拉取最新数据集并即时刷新 (数据源 ModelFit, 仅存最新一份)
+  - RR7 `<Form method=post>` → action; 快照 = `{syncedAt, updated, counts, data[]}`
+- 首页新增入口卡片 → 本地部署模型页
+  - `app/routes/home.tsx` 第二卡片 + `routes.ts` 显式路由 `route("modelfit", ...)`; `app/app.css` 追加 modelfit 局部样式 (RAM 输入/部署徽章/用途标签/Ollama 命令块), 无新增依赖
+
 ## [0.2.0] - 2026-07-24
 
 ### Added
