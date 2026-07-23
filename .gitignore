@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Env
+.env
+.env.local
+
+# Cloudflare React Router generated artifacts
+build/
+.react-router/
+.wrangler/
+worker-configuration.d.ts
+
+.*.mcp.json
