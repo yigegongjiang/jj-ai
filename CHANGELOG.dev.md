@@ -7,6 +7,23 @@
 
 # Changelog (developer, follow [CHANGELOG.md](./CHANGELOG.md))
 
+## [0.2.0] - 2026-07-24
+
+### Added
+
+- 大模型库页 (`/llms`): 全量检索 (命中高亮 + `-term` 排除) + 多维过滤 + 多列排序 + 详情抽屉
+  - `app/routes/llms.tsx`: loader 读 KV; action fetch `?output_modalities=all` → 仅在有效非空数组时覆盖快照 → 回传新数据; 组件 `actionData ?? loaderData` 渲染 (规避 KV 最终一致性)
+  - 客户端全量内存计算: `useMemo` 派生行 + 过滤/排序/高亮; `useDeferredValue` 平滑输入; 441 行无需虚拟化
+  - 过滤: 输入/输出模态·能力(tools/reasoning/structured)·价格档(inP 分档)·上架时间(客户端 `Date.now`, 默认 all 免水合不一致)·厂商多选(热门置顶 `POPULAR_PROVIDERS`, 其余按数量); 排序: 价格列单表头 4 态循环 (in↑/↓ out↑/↓), Auto(负哨兵)/缺失值恒排末尾
+- Sync 按钮: 一键拉取最新全量数据并即时刷新 (数据源 OpenRouter, 仅存最新一份)
+  - RR7 `<Form method=post>` → action; Cloudflare KV `MODELS_KV` 单键 `snapshot` = `{syncedAt, data[]}`; `wrangler.jsonc` kv 绑定
+- 首页: 入口卡片 → 模型库, 显示当前版本
+  - `app/routes/home.tsx` 改版; `app/app.css` 手写暗色设计系统经 `app/root.tsx` links 全局注入 (无 CSS 框架 / 无新增依赖)
+
+### Fixed
+
+- workflow.md 预部署: `npx wrangler deploy` → `bun run deploy` (前者不重新构建, 会部署 `build/` 陈旧产物)
+
 ## [0.1.0] - 2026-07-24
 
 ### Added

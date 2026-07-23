@@ -20,14 +20,16 @@
 
 依序执行：
 
-1. 预部署：`npx wrangler deploy`
+1. 预部署：`bun run deploy`
 2. 写版本：`CHANGELOG.md` + `CHANGELOG.dev.md` 同步编辑 (与 tag 一致)
 3. 发布：commit + annotated tag (`-a -m`) + push branch + tag
 4. 修上版 bug：amend + 删远程 tag + 重打 + force push
 
 ## 1. 预部署
 
-`npx wrangler deploy` 本机推送到 Cloudflare。
+`bun run deploy` (= `react-router build && wrangler deploy`) 本机推送到 Cloudflare。
+
+> MUST NOT 直接 `npx wrangler deploy`: 它不重新构建, 会部署 `build/` 里的陈旧产物。
 
 ## 2. 写版本
 

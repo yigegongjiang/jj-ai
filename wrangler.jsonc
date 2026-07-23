@@ -5,5 +5,8 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "./workers/app.ts",
   "observability": { "enabled": true },
-  "vars": { "HELLO_NAME": "jj-ai" }
+  "vars": { "HELLO_NAME": "jj-ai" },
+  "kv_namespaces": [
+    { "binding": "MODELS_KV", "id": "2309e17f1d1640a99a35180895602558" }
+  ]
 }

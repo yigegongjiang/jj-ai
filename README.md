@@ -18,11 +18,14 @@ AI 数据/知识展示站 (Cloudflare Workers) → 聚合消费开源 API。
 
 ## 架构
 
-Cloudflare Workers (SSR) + React Router 7 + 直连上游开源 API (匿名 GET) + 本地 JSON 快照兜底。
+Cloudflare Workers (SSR) + React Router 7 + Cloudflare KV 存全量快照 (Sync 时拉上游写入, 页面 SSR 读 KV) + 客户端全量内存检索/过滤/排序。上游数据源匿名 GET, 无 API Key / 无后端。
 
 ## 结构
 
-- `app/` React Router 路由 (`routes/home.tsx` = 首页)
+- `app/` React Router 路由 + 视图
+  - `routes/home.tsx` 首页 (入口卡片 + 版本)
+  - `routes/llms.tsx` 大模型库 (loader 读 KV / action Sync 写 KV / 客户端过滤)
+  - `app.css` 手写暗色设计系统 (经 `root.tsx` 全局注入)
 - `workers/app.ts` Worker 入口, 转发到 React Router
-- `wrangler.jsonc` Worker 配置 (`name: jj-ai`, `vars.HELLO_NAME`)
-- `.github/workflows/deploy.yml` tag `v*` 推送 → GHA 构建 + `wrangler deploy`
+- `wrangler.jsonc` Worker 配置 (`name: jj-ai`, KV 绑定 `MODELS_KV`, `vars.HELLO_NAME`)
+- `.github/workflows/deploy.yml` tag `v*` 推送 → GHA 构建 + 部署
