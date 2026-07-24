@@ -7,6 +7,19 @@
 
 # Changelog (developer, follow [CHANGELOG.md](./CHANGELOG.md))
 
+## [0.4.0] - 2026-07-24
+
+### Added
+
+- 首页 Bookmarks 区块: 自定义快捷 URL 书签, 增 / 改 / 删 + 6 色标记
+  - `app/routes/home.tsx`: loader 读 KV `bookmarks` 键 (复用 `MODELS_KV`, 无需改 `wrangler.jsonc`); action 按 `_action` (add/edit/delete) 整表覆盖写回; 组件以自动 revalidation 的 `loaderData` 为单一数据源
+  - `<Form method=post>` 提交 + SSR (无 localStorage / 无水合门控); `useNavigation` 检测提交完成后自动收起表单; `required` 保证不提交空值
+  - URL 规范化: 非 http(s) scheme 一律剥离改 https, 防 `javascript:` href 注入; 颜色仅接受固定 6 色板 (`pickColor`)
+  - 三种排序 (客户端派生): 高频 `clicks` (默认) / 最近 `createdAt` / 手动 (KV 数组序, HTML5 DnD 拖拽手柄 -> `reorder` action 写回); 仅 manual 且未筛选标签时可拖, 成员集不变时保留本地序防 KV 最终一致性回弹
+  - 点击计数: `<a onClick>` 经 `useFetcher` 后台提交 `click` action +1 (target=_blank 不阻塞跳转); `normalize` 兼容旧数据补 createdAt/clicks
+  - 标签: title 内 `#xx` 解析为标签 (`parseTags`), 顶部过滤条筛选 + 卡片内标签胶囊高亮; monogram 用去标签名 (`stripTags`)
+  - `app/app.css` `.bm-*` 局部样式 + `.bm-sort/.bm-tools/.dragging`; 首页为 1280px Bookmarks 主面板 + 应用侧栏, 900px 下单列, 名称完整换行, 无新增依赖
+
 ## [0.3.0] - 2026-07-24
 
 ### Added

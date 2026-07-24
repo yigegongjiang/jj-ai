@@ -23,10 +23,10 @@ Cloudflare Workers (SSR) + React Router 7 + Cloudflare KV 存全量快照 (Sync 
 ## 结构
 
 - `app/` React Router 路由 + 视图
-  - `routes/home.tsx` 首页 (入口卡片 + 版本)
+  - `routes/home.tsx` 首页 (入口卡片 + 版本 + Bookmarks 书签区块; loader/action 读写 `MODELS_KV` 键 `bookmarks`)
   - `routes/llms.tsx` 大模型库 (loader 读 KV / action Sync 写 KV / 客户端过滤; 数据源 OpenRouter)
   - `routes/modelfit.tsx` 本地部署模型 (RAM 反查; 数据源 ModelFit; 复用 `MODELS_KV` 键 `modelfit`)
   - `app.css` 手写暗色设计系统 (经 `root.tsx` 全局注入)
 - `workers/app.ts` Worker 入口, 转发到 React Router
-- `wrangler.jsonc` Worker 配置 (`name: jj-ai`, KV 绑定 `MODELS_KV` 存两数据集 (键 `snapshot`/`modelfit`), `vars.HELLO_NAME`)
+- `wrangler.jsonc` Worker 配置 (`name: jj-ai`, KV 绑定 `MODELS_KV` 存三键 (`snapshot`/`modelfit`/`bookmarks`), `vars.HELLO_NAME`)
 - `.github/workflows/deploy.yml` tag `v*` 推送 → GHA 构建 + 部署
