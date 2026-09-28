@@ -7,6 +7,13 @@
 
 # Changelog (developer, follow [CHANGELOG.md](./CHANGELOG.md))
 
+## [0.5.0] - 2026-09-28
+
+### Added
+
+- 模型库的厂商过滤和本地模型的系列过滤支持 `-词` 排除，可同时输入多个普通词和排除词
+  - `app/filter.ts` 统一解析包含/排除词；两个路由的 facet 输入按包含词全匹配、排除词任一命中即剔除，并在 placeholder 提示语法
+
 ## [0.4.0] - 2026-07-24
 
 ### Added

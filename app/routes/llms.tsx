@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import { Form, Link, useNavigation } from "react-router";
+import { matchesFilterTerms, parseFilterTerms } from "../filter";
 import type { Route } from "./+types/llms";
 
 // ============ types ============
@@ -252,16 +253,7 @@ export default function Llms({ loaderData, actionData }: Route.ComponentProps) {
   const [query, setQuery] = useState("");
   const q = useDeferredValue(query).trim().toLowerCase();
   // "-term" excludes; bare term includes (AND). only include-terms get highlighted
-  const { inc, exc } = useMemo(() => {
-    const inc: string[] = [];
-    const exc: string[] = [];
-    for (const t of q.split(/\s+/).filter(Boolean)) {
-      if (t.startsWith("-")) {
-        if (t.length > 1) exc.push(t.slice(1));
-      } else inc.push(t);
-    }
-    return { inc, exc };
-  }, [q]);
+  const { inc, exc } = useMemo(() => parseFilterTerms(q), [q]);
   const [outSel, setOutSel] = useState<Set<string>>(new Set());
   const [inSel, setInSel] = useState<Set<string>>(new Set());
   const [caps, setCaps] = useState<Set<string>>(new Set());
@@ -270,6 +262,7 @@ export default function Llms({ loaderData, actionData }: Route.ComponentProps) {
   const [added, setAdded] = useState("all");
   const [provSel, setProvSel] = useState<Set<string>>(new Set());
   const [provQ, setProvQ] = useState("");
+  const provTerms = useMemo(() => parseFilterTerms(provQ), [provQ]);
   const [sortKey, setSortKey] = useState<SortKey>("created");
   const [asc, setAsc] = useState(false);
   const [sel, setSel] = useState<Model | null>(null);
@@ -564,13 +557,13 @@ export default function Llms({ loaderData, actionData }: Route.ComponentProps) {
               className="fsearch"
               value={provQ}
               onChange={(e) => setProvQ(e.target.value)}
-              placeholder="Filter providers…"
+              placeholder="Filter providers…  -term excludes"
               spellCheck={false}
               autoComplete="off"
             />
             <div className="plist">
               {facets.provs
-                .filter(([k]) => k.includes(provQ.trim().toLowerCase()))
+                .filter(([k]) => matchesFilterTerms(k, provTerms))
                 .map(([k, n]) => (
                   <button
                     key={k}

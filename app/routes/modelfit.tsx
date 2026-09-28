@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import { Form, Link, useNavigation } from "react-router";
+import { matchesFilterTerms, parseFilterTerms } from "../filter";
 import type { Route } from "./+types/modelfit";
 
 // ============ types ============
@@ -247,16 +248,7 @@ export default function ModelFit({
   const [query, setQuery] = useState("");
   const q = useDeferredValue(query).trim().toLowerCase();
   // "-term" excludes; bare term includes (AND). only include-terms get highlighted
-  const { inc, exc } = useMemo(() => {
-    const inc: string[] = [];
-    const exc: string[] = [];
-    for (const t of q.split(/\s+/).filter(Boolean)) {
-      if (t.startsWith("-")) {
-        if (t.length > 1) exc.push(t.slice(1));
-      } else inc.push(t);
-    }
-    return { inc, exc };
-  }, [q]);
+  const { inc, exc } = useMemo(() => parseFilterTerms(q), [q]);
   const [ram, setRam] = useState(""); // RAM budget (GB); "" = off
   const [deploy, setDeploy] = useState("all"); // all | local | cloud
   const [openOnly, setOpenOnly] = useState(false);
@@ -265,6 +257,7 @@ export default function ModelFit({
   const [band, setBand] = useState("all");
   const [famSel, setFamSel] = useState<Set<string>>(new Set());
   const [famQ, setFamQ] = useState("");
+  const famTerms = useMemo(() => parseFilterTerms(famQ), [famQ]);
   const [sortKey, setSortKey] = useState<SortKey>("ram");
   const [asc, setAsc] = useState(true);
   const [sel, setSel] = useState<Row | null>(null);
@@ -546,13 +539,13 @@ export default function ModelFit({
               className="fsearch"
               value={famQ}
               onChange={(e) => setFamQ(e.target.value)}
-              placeholder="Filter families…"
+              placeholder="Filter families…  -term excludes"
               spellCheck={false}
               autoComplete="off"
             />
             <div className="plist">
               {facets.fam
-                .filter(([k]) => k.toLowerCase().includes(famQ.trim().toLowerCase()))
+                .filter(([k]) => matchesFilterTerms(k, famTerms))
                 .map(([k, n]) => (
                   <button
                     key={k}

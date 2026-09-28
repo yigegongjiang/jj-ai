@@ -11,6 +11,12 @@
 
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) + [SemVer](https://semver.org/).
 
+## [0.5.0] - 2026-09-28
+
+### Added
+
+- 模型库的厂商过滤和本地模型的系列过滤支持 `-词` 排除，可同时输入多个普通词和排除词
+
 ## [0.4.0] - 2026-07-24
 
 ### Added
